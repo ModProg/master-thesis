@@ -7,7 +7,7 @@
     bibliography=totoc,
     numbers=noenddot,       % Entfernt den letzten Punkt der Kapitelnummern.
     open=any,               % Kapitel kann auf jeder Seite beginnen.
-    %   final                   % Entfernt alle todonotes und den Entwurfstempel.
+      final                   % Entfernt alle todonotes und den Entwurfstempel.
 ]{scrreprt}
 % ===================================Praeambel==================================
 \include{../tex/style}
@@ -46,8 +46,7 @@
     \textbf{\@author} \par
     \smallskip
     \hrule
-    dev@modprog.de \todo{Not sure if this should be the university e-mail as I
-        wouldn't keep access to it} \\
+    dev@modprog.de \\
     M.Sc. Informatics \\
     Matriculation number: 7031533 \par
     \bigskip
@@ -72,7 +71,9 @@
 TAMS has a robot equipped with an \emph{Azure Kinect} providing not only a visual data, but also multichannel audio from a 7 microphone array \cite{kinect}. This spacial audio data should be used to perform sound source localization (SSL) and separation as well as reduction of ego and environmental noise.
 
 \chapter{Existing Work}
-\section{Sound Source Localization}
+\label{ew}
+\section{Sound Source Localization (SSL)}
+\label{ssl}
 
 A very extensive collection of algorithms and their performance in different scenarios is provided by \textcite{LOCATA} with the LOCATA challenge comparing different algorithms in situations very similar to the proposed usage in the research question (\autoref{question}). Containing scenarios with moving sensors and sources on top of background noise and distortions such as reverberations. Their work also contains tests with multiple audio sources.
 
@@ -88,16 +89,32 @@ The only submitted algorithm applied to all scenarios using the \emph{Robot Head
 \end{itemize}
 This allows their algorithm to not only locate static sound sources but also allows scenarios with either the sound sources, the microphone array or both moving.
 
+Another comprehensive set of SSL methods was collected by \textcite{SSLsurvey} though this one was focused solely on deep learning approaches. Two of the most capable methods were proposed by \textcite{dl_static} and \textcite{dl_dynamic}, with both providing support for multiple audio sources, but only the latter being able to track moving sources.
+
 \section{Noise Reduction}
+The specific use case of suppressing both ego-noise and environmental noise is investigated in \cite{nr_single} and \cite{nr_multi} the latter even using a 4 microphone array similar to our setup. They show that combining a pretrained algorithm for ego-noise suppression and an adaptive part able to better reduce environmental noise to a partially adaptive scheme, perform better than both fixed and adaptive systems on their own.
 
+\chapter{Thesis Content}
 
-\chapter{Planned}
+The main focus of the thesis is the localization of audio sources, building on top of that dynamic tracking and source separation will be applied as well as the suppression of background noises, depending on the complexity and difficulties of implementing the different algorithms. On top of developing the systems to do localization and noise suppression the produced data should be provided for usage in the robot-operating-system (ROS).
 
-As three-dimensional localization is difficult to achieve using a static
-microphone array \cite{LOCATA} the localization efforts will focus on the
-direction of arrival (DoA).
+As the proposed algorithms in \autoref{ew} are not completely available as executable code, they need to be implemented first to be able to run and test them. The final sound source localization software for running on ROS should be provided as Open Source software after thesis completion.
+
+\section{Localization}
+As three-dimensional localization is difficult to achieve using a static microphone array \cite{LOCATA} the localization efforts will focus on the direction of arrival (DoA). For this the most promising algorithms proposed in \autoref{ssl} will be compared when applied to the real world usage with the Kinect input and our robots noise. The data produced this way e.g.\ an angle pair then can be provided as a ROS-topic. For tracking these could be extended with a unique id to identify different moving sources.
+
+\section{Noise Reduction}
+For noise reduction the proposed scheme by \textcite{nr_multi} will be applied to suppress both ego and environmental noise and provide clean audio for later consumption e.g.\ by voice recognition software.
 
 \chapter{Time Plan}
+\begin{tabularx}{\textwidth}{l X}
+    January     & Registration of Master's Thesis                                                \\
+    February    & Implementation of the proposed algorithms                                      \\
+    March       & Developing test setup for algorithms on robot and comparing performance        \\
+    April - May & Investigate feasibility of implementing noise reduction on top of localization \\
+    June        & Finalizing the thesis                                                          \\
+    July        & Submission
+\end{tabularx}
 
 % =============================Literaturverzeichnis=============================
 \begin{raggedright}         % Schaltet Blocksatz ab, erzeugt ein stimmigeres
